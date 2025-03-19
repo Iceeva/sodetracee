@@ -2,6 +2,11 @@
 
 @section('content')
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-6">
+    <h1 class="text-2xl font-bold mb-6">Tableau de bord Admin</h1>
+    <p>Bienvenue, {{ auth()->user()->name }} ! Vous êtes connecté en tant qu’administrateur.</p>
+    <!-- Ajoutez ici le contenu spécifique aux admins -->
+    </div>
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-6">
         <h1 class="text-2xl font-bold mb-6">Administration</h1>
 
         <!-- Boutons de sélection -->

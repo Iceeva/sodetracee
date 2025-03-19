@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 
-class RestrictAccess
+class Restrict
 {
     public function handle(Request $request, Closure $next, $role)
     {

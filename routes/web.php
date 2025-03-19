@@ -3,21 +3,19 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BalesController;
 use App\Http\Controllers\AdminController;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request; 
+use Illuminate\Support\Facades\Route;
 
-// Routes d'authentification générées par Breeze
 require __DIR__.'/auth.php';
 
-Route::get('/login', function () {
-    return view('auth.login'); // Vérifie que ce fichier existe bien
-})->name('login');
-
-// Page d'accueil : bales.blade.php
+// Routes publiques
 Route::get('/', fn() => view('bales.bales'))->name('home');
+Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
+Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
 // Routes protégées par l'authentification
 Route::middleware('auth')->group(function () {
@@ -28,6 +26,7 @@ Route::middleware('auth')->group(function () {
     // Routes Admin
     Route::middleware('restrict:admin')->group(function () {
         Route::get('/admin', [AdminController::class, 'index'])->name('admin');
+        Route::get('/dashboard/admin', [AdminController::class, 'dashboard'])->name('dashboard.admin');
         Route::post('/admin/bales', [AdminController::class, 'storeBale'])->name('admin.bales.store');
         Route::put('/admin/bales/{id}', [AdminController::class, 'updateBale'])->name('admin.bales.update');
         Route::delete('/admin/bales/{id}', [AdminController::class, 'destroyBale'])->name('admin.bales.destroy');
@@ -42,24 +41,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Route de déconnexion
-Route::post('/logout', function (Request $request) {
-    Auth::logout();
-    $request->session()->invalidate();
-    $request->session()->regenerateToken();
-    return redirect('/login');
-})->name('logout');
-
 // Routes pour la vérification d'email
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', fn() => view('dashboard'))->name('dashboard');
 });
 
-Route::get('/email/verify', function () {
-    return view('auth.verify-email');
-})->middleware('auth')->name('verification.notice');
+Route::get('/email/verify', fn() => view('auth.verify-email'))->middleware('auth')->name('verification.notice');
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
