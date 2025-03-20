@@ -12,14 +12,16 @@
         @endif
 
         <!-- Tabs Navigation -->
-        <img src="{{ asset('images/logo.png') }}" alt="Logo SODECO" class="w-5 h-5 mr-2">
-        <div class="flex justify-center mb-4">
-            <button id="loginTab" class="px-4 py-2 text-blue-600 border-b-2 border-blue-600">Connexion</button>
-            <button id="registerTab" class="px-4 py-2 text-gray-600">Inscription</button>
+        <div class="flex items-center justify-center mb-4">
+            <img src="{{ asset('images/logo.png') }}" alt="Logo SODECO" class="w-5 h-5 mr-2">
+            <div class="flex justify-center">
+                <button id="loginTab" class="px-4 py-2 text-blue-600 border-b-2 border-blue-600">Connexion</button>
+                <button id="registerTab" class="px-4 py-2 text-gray-600">Inscription</button>
+            </div>
         </div>
 
         <!-- Login Form -->
-        <form id="loginForm" method="POST" action="{{ route('login') }}" class="">
+        <form id="loginForm" method="POST" action="{{ route('login') }}">
             @csrf
             <div>
                 <x-input-label for="email" :value="__('Email')" />
@@ -28,17 +30,10 @@
             </div>
 
             <div class="mt-4">
-                <x-input-label for="mot de passe" :value="__('Mot de passe')" />
+                <x-input-label for="password" :value="__('Mot de passe')" /> <!-- Corrigé "mot de passe" dans l’ID -->
                 <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
                 <x-input-error :messages="$errors->get('password')" class="mt-2" />
             </div>
-
-            {{-- <div class="block mt-4">
-                <label for="remember_me" class="inline-flex items-center">
-                    <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                    <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-                </label>
-            </div> --}}
 
             <div class="flex items-center justify-between mt-4">
                 @if (Route::has('password.request'))
@@ -46,7 +41,7 @@
                         {{ __('Vous avez oublié votre mot de passe ?') }}
                     </a>
                 @endif
-                <x-primary-button class="ms-3">{{ __("Se connecter") }}</x-primary-button>
+                <x-primary-button class="ms-3">{{ __('Se connecter') }}</x-primary-button>
             </div>
         </form>
 
@@ -69,11 +64,11 @@
                 <x-input-error :messages="$errors->get('password')" class="mt-2" />
             </div>
             <div class="mt-4">
-                <x-input-label for="password_confirmation" :value="__('Confirm mot de passe')" />
+                <x-input-label for="password_confirmation" :value="__('Confirmer le mot de passe')" />
                 <x-text-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required />
             </div>
             <div class="flex items-center justify-between mt-4">
-                <x-primary-button class="ms-3">{{ __("s'inscrire") }}</x-primary-button>
+                <x-primary-button class="ms-3">{{ __('S\'inscrire') }}</x-primary-button>
             </div>
         </form>
 

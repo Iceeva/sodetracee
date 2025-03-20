@@ -9,12 +9,20 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
+    public function dashboard()
+    {
+        $bales = Bale::all();
+        $agents = User::where('role', 'agent')->get();
+        $buyers = User::where('role', 'buyer')->get();
+        return view('admin', compact('bales', 'agents', 'buyers'));
+    }
+
     public function index()
     {
         $bales = Bale::all();
         $agents = User::where('role', 'agent')->get();
         $buyers = User::where('role', 'buyer')->get();
-        return view('dashboard.admin', compact('bales', 'agents', 'buyers'));
+        return view('admin', compact('bales', 'agents', 'buyers'));
     }
 
     // Gestion des balles
@@ -59,7 +67,7 @@ class AdminController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email',
             'password' => 'required|string|min:8',
-            'role' => 'required|in:agent,buyer', // Limité à agent ou buyer
+            'role' => 'required|in:agent,buyer',
         ]);
 
         User::create([
@@ -77,7 +85,7 @@ class AdminController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $id,
-            'role' => 'required|in:agent,buyer', // Limité à agent ou buyer
+            'role' => 'required|in:agent,buyer',
         ]);
 
         $user = User::findOrFail($id);
