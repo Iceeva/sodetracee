@@ -9,15 +9,13 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
-    public function dashboard()
+   
+    public function index()
     {
-        $bales = Bale::all();
-        $agents = User::where('role', 'agent')->get();
-        $buyers = User::where('role', 'buyer')->get();
-        return view('admin', compact('bales', 'agents', 'buyers'));
+        return $this->admin(); // ok
     }
 
-    public function index()
+    public function admin()
     {
         $bales = Bale::all();
         $agents = User::where('role', 'agent')->get();

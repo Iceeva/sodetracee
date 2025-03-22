@@ -10,6 +10,31 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+
+    /**
+     * Vérifie si l'utilisateur est un administrateur.
+     */
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+
+    /**
+     * Vérifie si l'utilisateur est un agent.
+     */
+    public function isAgent()
+    {
+        return $this->role === 'agent';
+    }
+
+    /**
+     * Vérifie si l'utilisateur est un acheteur.
+     */
+    public function isAcheteur()
+    {
+        return $this->role === 'acheteur';
+    }
+
     protected $fillable = [
         'name',
         'email',
