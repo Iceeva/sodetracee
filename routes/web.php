@@ -14,6 +14,7 @@ use App\Http\Controllers\ScanController;
 use App\Http\Controllers\AgentController;
 use App\Http\Controllers\BaleController;
 use App\Http\Controllers\UsersController;
+use Intervention\Image\Facades\Image;
 
 
 require __DIR__.'/auth.php';
@@ -95,3 +96,4 @@ Route::get('/email/verify/{id}/{hash}', VerifyEmailController::class)
 
 
 Route::post('/scanner/generate', [ScanController::class, 'generateQRCode'])->name('scanner.generate');
+

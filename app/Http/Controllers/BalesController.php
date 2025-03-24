@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\Auth;
+use Intervention\Image\Facades\Image;
 
 class BalesController extends Controller
 {
@@ -27,19 +28,22 @@ class BalesController extends Controller
         $url = route('bales.scan', $bale->reference);
 
         // Génération du QR code
-        $qrCode = QrCode::size(200)->generate($url);
+        $qrCode = QrCode::format('png')->size(200)->generate($url);
+
+        // Création de l'image avec le QR code et la référence
+        $qrCodeImage = Image::make($qrCode);
+        $qrCodeImage->resize(200, 200);
+        $qrCodeImage->text($bale->reference, 100, 220, function ($font) {
+            $font->file(public_path('fonts/arial.ttf')); //  la police 
+            $font->size(16);
+            $font->align('center');
+            $font->valign('top');
+        });
+
         $qrCodePath = public_path('images/qr_codes/' . $bale->reference . '.png');
-        file_put_contents($qrCodePath, $qrCode);
+        $qrCodeImage->save($qrCodePath);
 
-        // Conversion en PDF
-        $pdf = PDF::loadView('bales.qr-pdf', [
-            'qrCodePath' => $qrCodePath,
-            'reference' => $bale->reference
-        ]);
-        $pdfPath = public_path('images/qr_codes/' . $bale->reference . '.pdf');
-        $pdf->save($pdfPath);
-
-        return response()->download($pdfPath)->deleteFileAfterSend(true);
+        return response()->download($qrCodePath)->deleteFileAfterSend(true);
     }
 
     public function scan($reference)
